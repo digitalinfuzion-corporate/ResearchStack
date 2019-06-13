@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -22,6 +23,7 @@ import org.researchstack.backbone.ui.ViewWebDocumentActivity;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.views.FixedSubmitBarLayout;
 import org.researchstack.backbone.ui.views.SubmitBar;
+import org.researchstack.backbone.utils.AnimationsUtil;
 import org.researchstack.backbone.utils.ResUtils;
 import org.researchstack.backbone.utils.TextUtils;
 
@@ -29,6 +31,7 @@ public class ConsentVisualStepLayout extends FixedSubmitBarLayout implements Ste
 
     private StepCallbacks callbacks;
     private ConsentVisualStep step;
+    ImageView imageView;
 
     public ConsentVisualStepLayout(Context context) {
         super(context);
@@ -79,7 +82,7 @@ public class ConsentVisualStepLayout extends FixedSubmitBarLayout implements Ste
         int accentColor = a.getColor(0, 0);
         a.recycle();
 
-        ImageView imageView = (ImageView) findViewById(R.id.image);
+        imageView = (ImageView) findViewById(R.id.image);
 
         String imageName = !TextUtils.isEmpty(data.getCustomImageName())
                 ? data.getCustomImageName()
@@ -96,6 +99,29 @@ public class ConsentVisualStepLayout extends FixedSubmitBarLayout implements Ste
         } else {
             imageView.setVisibility(View.GONE);
         }
+
+        //blink();
+        switch (data.getType().getImageName()) {
+            case "DataGathering": {
+                AnimationsUtil.blink(imageView);
+            }
+            break;
+            case "Privacy":
+                break;
+            case "DataUse":
+                break;
+            case "TimeCommitment":
+                break;
+            case "StudySurvey":
+                break;
+            case "StudyTasks":
+                break;
+            case "Withdrawing":
+                break;
+            default:
+                break;
+        }
+
 
         // Set Title
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -134,4 +160,6 @@ public class ConsentVisualStepLayout extends FixedSubmitBarLayout implements Ste
                 null));
         submitBar.getNegativeActionView().setVisibility(View.GONE);
     }
+
+
 }

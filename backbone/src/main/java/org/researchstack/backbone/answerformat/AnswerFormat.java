@@ -2,10 +2,12 @@ package org.researchstack.backbone.answerformat;
 
 import org.researchstack.backbone.ui.step.body.DateQuestionBody;
 import org.researchstack.backbone.ui.step.body.DecimalQuestionBody;
+import org.researchstack.backbone.ui.step.body.DropDownQuestionBody;
 import org.researchstack.backbone.ui.step.body.DurationQuestionBody;
 import org.researchstack.backbone.ui.step.body.FormBody;
 import org.researchstack.backbone.ui.step.body.IntegerQuestionBody;
 import org.researchstack.backbone.ui.step.body.MultiChoiceQuestionBody;
+import org.researchstack.backbone.ui.step.body.MultipleDropDownQuestionBody;
 import org.researchstack.backbone.ui.step.body.NotImplementedStepBody;
 import org.researchstack.backbone.ui.step.body.SingleChoiceQuestionBody;
 import org.researchstack.backbone.ui.step.body.TextQuestionBody;
@@ -61,6 +63,8 @@ public abstract class AnswerFormat implements Serializable {
         Date(DateQuestionBody.class),
         TimeInterval(NotImplementedStepBody.class),
         Duration(DurationQuestionBody.class),
+        DropDown(DropDownQuestionBody.class),
+        MultipleDropDown(MultipleDropDownQuestionBody.class),
         Location(NotImplementedStepBody.class),
         Form(FormBody.class);
 

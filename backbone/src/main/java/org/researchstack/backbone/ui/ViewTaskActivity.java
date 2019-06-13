@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import org.researchstack.backbone.R;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
@@ -19,8 +21,10 @@ import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.backbone.ui.callbacks.StepCallbacks;
 import org.researchstack.backbone.ui.step.layout.StepLayout;
+import org.researchstack.backbone.ui.views.CircleProgressBar;
+import org.researchstack.backbone.ui.views.RingProgressBar;
 import org.researchstack.backbone.ui.views.StepSwitcher;
-
+import org.researchstack.backbone.utils.PieProgressDrawable;
 import java.lang.reflect.Constructor;
 import java.util.Date;
 
@@ -28,12 +32,16 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
     public static final String EXTRA_TASK = "ViewTaskActivity.ExtraTask";
     public static final String EXTRA_TASK_RESULT = "ViewTaskActivity.ExtraTaskResult";
     public static final String EXTRA_STEP = "ViewTaskActivity.ExtraStep";
-
     private StepSwitcher root;
+
+//    PieProgressDrawable pieProgressDrawable;
+    RingProgressBar timeProgress;
 
     private Step currentStep;
     private Task task;
     private TaskResult taskResult;
+    private CircleProgressBar progress_circular;
+    int counter =0;
 
     public static Intent newIntent(Context context, Task task) {
         Intent intent = new Intent(context, ViewTaskActivity.class);
@@ -53,6 +61,12 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
 
         root = (StepSwitcher) findViewById(R.id.container);
 
+//        pieProgressDrawable = new PieProgressDrawable();
+//        pieProgressDrawable.setColor(ContextCompat.getColor(this, R.color.rsb_nof1_primary));
+
+        timeProgress = (RingProgressBar) findViewById(R.id.time_progress);
+        progress_circular =(CircleProgressBar)findViewById(R.id.progress_circular);
+        progress_circular.setColor(getResources().getColor(R.color.rsb_nof1_primary));
         if (savedInstanceState == null) {
             task = (Task) getIntent().getSerializableExtra(EXTRA_TASK);
             taskResult = new TaskResult(task.getIdentifier());
@@ -66,8 +80,13 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
         task.validateParameters();
 
         task.onViewChange(Task.ViewChangeType.ActivityCreate, this, currentStep);
+
     }
 
+    public void updateProgress(int count) {
+        timeProgress.setProgress(count);
+        progress_circular.setProgress(count);
+    }
     /**
      * Returns the actual current step being shown.
      *
@@ -83,6 +102,8 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
             saveAndFinish();
         } else {
             showStep(nextStep);
+            counter = counter+20;
+            updateProgress(counter);
         }
     }
 
@@ -92,6 +113,9 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
             finish();
         } else {
             showStep(previousStep);
+
+            counter = counter-20;
+            updateProgress(counter);
         }
     }
 
@@ -107,12 +131,19 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
                         ? StepSwitcher.SHIFT_LEFT
                         : StepSwitcher.SHIFT_RIGHT);
         currentStep = step;
+
     }
 
     protected StepLayout getLayoutForStep(Step step) {
         // Change the title on the activity
-        String title = task.getTitleForStep(this, step);
-        setActionBarTitle(title);
+        // String title = task.getTitleForStep(this, step);
+//        setActionBarTitle(title);
+
+        try {
+            updateProgress(counter);
+        } catch (Exception e) {
+            Log.e("myApp", e.toString());
+        }
 
         // Get result from the TaskResult, can be null
         StepResult result = taskResult.getStepResult(step.getIdentifier());
@@ -130,6 +161,7 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
         try {
             Class cls = step.getStepLayoutClass();
             Constructor constructor = cls.getConstructor(Context.class);
+
             return (StepLayout) constructor.newInstance(this);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -224,6 +256,7 @@ public class ViewTaskActivity extends PinCodeActivity implements StepCallbacks {
     protected void onExecuteStepAction(int action) {
         if (action == StepCallbacks.ACTION_NEXT) {
             showNextStep();
+
         } else if (action == StepCallbacks.ACTION_PREV) {
             showPreviousStep();
         } else if (action == StepCallbacks.ACTION_END) {

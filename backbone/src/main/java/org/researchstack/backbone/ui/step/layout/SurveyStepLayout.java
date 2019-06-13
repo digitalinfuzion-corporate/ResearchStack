@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.researchstack.backbone.R;
 import org.researchstack.backbone.ResourcePathManager;
 import org.researchstack.backbone.result.StepResult;
+import org.researchstack.backbone.step.FormStep;
 import org.researchstack.backbone.step.QuestionStep;
 import org.researchstack.backbone.step.Step;
 import org.researchstack.backbone.ui.ViewWebDocumentActivity;
@@ -28,6 +29,8 @@ import org.researchstack.backbone.utils.LogExt;
 import org.researchstack.backbone.utils.TextUtils;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SurveyStepLayout extends FixedSubmitBarLayout implements StepLayout {
     public static final String TAG = SurveyStepLayout.class.getSimpleName();
@@ -120,7 +123,11 @@ public class SurveyStepLayout extends FixedSubmitBarLayout implements StepLayout
         if (questionStep != null) {
             if (!TextUtils.isEmpty(questionStep.getTitle())) {
                 title.setVisibility(View.VISIBLE);
-                title.setText(questionStep.getTitle());
+                if(questionStep.isOptional()) {
+                    title.setText(questionStep.getTitle());
+                }else{
+                    title.setText(questionStep.getTitle()+" *");
+                }
             }
 
             if (!TextUtils.isEmpty(questionStep.getText())) {
@@ -139,11 +146,28 @@ public class SurveyStepLayout extends FixedSubmitBarLayout implements StepLayout
                 });
             }
 
-            if (questionStep.isOptional()) {
-                submitBar.setNegativeTitle(R.string.rsb_step_skip);
-                submitBar.setNegativeAction(v -> onSkipClicked());
-            } else {
-                submitBar.getNegativeActionView().setVisibility(View.GONE);
+            if(questionStep instanceof FormStep){
+                List<QuestionStep> questionSteps =((FormStep) questionStep).getFormSteps();
+                boolean isShowSkip =true;
+                for(int i=0;i<questionSteps.size();i++){
+                    if(!questionSteps.get(i).isOptional()){
+                        isShowSkip =false;
+                        break;
+                    }
+                }
+                if (isShowSkip) {
+                    submitBar.setNegativeTitle(R.string.rsb_step_skip);
+                    submitBar.setNegativeAction(v -> onSkipClicked());
+                } else {
+                    submitBar.getNegativeActionView().setVisibility(View.GONE);
+                }
+            }else {
+                if (questionStep.isOptional()) {
+                    submitBar.setNegativeTitle(R.string.rsb_step_skip);
+                    submitBar.setNegativeAction(v -> onSkipClicked());
+                } else {
+                    submitBar.getNegativeActionView().setVisibility(View.GONE);
+                }
             }
         }
     }
