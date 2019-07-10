@@ -132,7 +132,7 @@ public class OrderedTask extends Task implements Serializable {
     /**
      * Validates that there are no duplicate identifiers in the list of steps
      *
-     * @throws org.researchstack.backbone.task.Task.InvalidTaskException
+     * @throws InvalidTaskException
      */
     @Override
     public void validateParameters() {

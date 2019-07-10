@@ -5,15 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.Toast;
+
 import org.researchstack.backbone.R;
 import org.researchstack.backbone.result.StepResult;
 import org.researchstack.backbone.result.TaskResult;
@@ -24,7 +23,7 @@ import org.researchstack.backbone.ui.step.layout.StepLayout;
 import org.researchstack.backbone.ui.views.CircleProgressBar;
 import org.researchstack.backbone.ui.views.RingProgressBar;
 import org.researchstack.backbone.ui.views.StepSwitcher;
-import org.researchstack.backbone.utils.PieProgressDrawable;
+
 import java.lang.reflect.Constructor;
 import java.util.Date;
 

@@ -5,6 +5,7 @@ import android.support.annotation.StringRes;
 
 import org.researchstack.backbone.R;
 
+
 public class BodyAnswer {
     public static final BodyAnswer VALID = new BodyAnswer(true, 0);
     public static final BodyAnswer INVALID = new BodyAnswer(false,

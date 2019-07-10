@@ -17,15 +17,11 @@ import org.researchstack.backbone.R;
 
 public class RingProgressBar extends View {
 
-
     private Paint paint;
-
 
     private int width;
 
-
     private int height;
-
 
     private int result = 0;
 
@@ -121,16 +117,23 @@ public class RingProgressBar extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(ringWidth);
         paint.setAntiAlias(true);
+
         canvas.drawCircle(centre, centre, radius, paint);
     }
 
 
     private void drawTextContent(Canvas canvas) {
+
         paint.setStrokeWidth(0);
+
         paint.setColor(textColor);
+
         paint.setTextSize(textSize);
+
         paint.setTypeface(Typeface.DEFAULT);
+
         int percent = (int) (((float) progress / (float) max) * 100);
+
         float textWidth = paint.measureText(percent + "%");
         if (textIsShow && percent != 0 && style == STROKE) {
             canvas.drawText(percent + "%", centre - textWidth / 2, centre + textSize / 2, paint);
@@ -139,11 +142,14 @@ public class RingProgressBar extends View {
 
 
     private void drawProgress(Canvas canvas) {
+
         paint.setStrokeWidth(ringWidth);
         paint.setColor(ringProgressColor);
 
+
         RectF strokeOval = new RectF(centre - radius, centre - radius, centre + radius,
                 centre + radius);
+
         RectF fillOval = new RectF(centre - radius + ringWidth + padding,
                 centre - radius + ringWidth + padding, centre + radius - ringWidth - padding,
                 centre + radius - ringWidth - padding);
@@ -173,6 +179,7 @@ public class RingProgressBar extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -184,11 +191,13 @@ public class RingProgressBar extends View {
             width = widthSize;
         }
 
+
         if (heightMode == MeasureSpec.AT_MOST) {
             height = result;
         } else {
             height = heightSize;
         }
+
 
         setMeasuredDimension(width, height);
     }
@@ -198,10 +207,10 @@ public class RingProgressBar extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
         super.onSizeChanged(w, h, oldw, oldh);
+
         width = w;
         height = h;
     }
-
 
 
     public synchronized int getMax() {
@@ -226,6 +235,7 @@ public class RingProgressBar extends View {
     }
 
 
+
     public synchronized void setProgress(int progress) {
 
         if (progress < 0) {
@@ -244,6 +254,8 @@ public class RingProgressBar extends View {
             }
         }
     }
+
+
 
     public int getRingColor() {
 
@@ -264,7 +276,6 @@ public class RingProgressBar extends View {
         return ringProgressColor;
     }
 
-
     public void setRingProgressColor(int ringProgressColor) {
 
         this.ringProgressColor = ringProgressColor;
@@ -282,6 +293,7 @@ public class RingProgressBar extends View {
 
         this.textColor = textColor;
     }
+
 
 
     public float getTextSize() {
@@ -302,6 +314,7 @@ public class RingProgressBar extends View {
 
         return ringWidth;
     }
+
 
 
     public void setRingWidth(float ringWidth) {
